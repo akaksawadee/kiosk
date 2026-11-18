@@ -243,7 +243,10 @@
       if (k2 === 'default') tunjukBar('🔔 Tekan <b>Hidupkan</b>, kemudian pilih <b>Benarkan / Allow</b>.', true);
       else if (k2 === 'granted') ambilToken().catch(function () {});
       else if (k2 === 'perlu-pasang') tunjukBar('📲 Di iPhone, notifikasi hanya berfungsi selepas app <b>ditambah ke Skrin Utama</b> (Safari → Kongsi → Tambah ke Skrin Utama) dan dibuka dari ikon.', false);
-      else if (k2 === 'denied') tunjukBar('🔕 Notifikasi telah disekat untuk app ini. Buka <b>Tetapan telefon → Notifikasi</b> dan benarkan untuk app ini.', false);
+      else if (k2 === 'denied') tunjukBar(iOS ? '🔕 Notifikasi disekat. Buka <b>Tetapan iPhone → Pemberitahuan → Sawadee ' + (JENIS === 'vendor' ? 'Vendor' : 'Staf') + '</b> dan hidupkan <b>Benarkan Pemberitahuan</b>.'
+        : '🔕 Notifikasi telah disekat untuk app ini. Buka <b>Tetapan telefon → Apl → Sawadee → Pemberitahuan</b> dan hidupkan.', false);
+      else if (k2 === 'tidak-disokong') tunjukBar(iOS ? '📵 iPhone ini perlu dikemas kini ke <b>iOS 16.4 ke atas</b> untuk notifikasi (Tetapan → Umum → Kemas Kini Perisian).'
+        : '📵 Pelayar ini tidak menyokong notifikasi. Sila buka link dengan <b>Google Chrome</b> dan pasang semula app.', false);
       else balas({ keadaan: k2 });
     } else if (d.sawadee === 'keluar') {              // vendor log keluar: berhenti terima di telefon ini
       if (messaging) messaging.deleteToken().catch(function () {});
