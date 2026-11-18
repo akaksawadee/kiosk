@@ -234,7 +234,9 @@
       var k = keadaan();
       balas({ keadaan: k });
       if (k === 'granted') ambilToken().catch(function (x) { balas({ keadaan: 'ralat', ralat: String(x && x.message || x) }); });
-      else if (k === 'default' && !baruTangguh()) tunjukBar('🔔 <b>Hidupkan notifikasi?</b><br><span style="color:#666;font-size:13px">Dapat makluman bila baki dikemas kini, reject atau jumlah hantaran tak sama.</span>', true);
+      else if (k === 'default' && !baruTangguh()) tunjukBar('🔔 <b>Hidupkan notifikasi?</b><br><span style="color:#666;font-size:13px">' + (JENIS === 'vendor'
+        ? 'Dapat makluman bila baki dikemas kini, reject atau jumlah hantaran tak sama.'
+        : 'Dapat makluman bila kiosk ditutup, ada reject, jumlah terima tak sama atau permohonan vendor.') + '</span>', true);
     } else if (d.sawadee === 'minta') {              // vendor tekan butang dalam app
       sumber = e.source;
       var k2 = keadaan();
