@@ -1,10 +1,9 @@
 // Service worker ringkas: simpan fail app supaya terbuka cepat.
 // Kandungan Apps Script (data jualan) TIDAK disimpan — sentiasa diambil terus dari internet.
-const CACHE = 'sawadee-v1';
-const FAIL = ['./', './index.html', './config.js', './app.js',
-  './vendor/', './vendor/index.html', './vendor/manifest.webmanifest',
-  './staf/', './staf/index.html', './staf/manifest.webmanifest',
-  './ikon/vendor-192.png', './ikon/vendor-512.png', './ikon/staf-192.png', './ikon/staf-512.png', './ikon/favicon.png'];
+const CACHE = 'sawadee-v3';
+const FAIL = ['./', './index.html', './vendor.html', './staf.html', './config.js', './app.js',
+  './manifest-vendor.webmanifest', './manifest-staf.webmanifest',
+  './vendor-192.png', './vendor-512.png', './staf-192.png', './staf-512.png', './favicon.png'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -23,4 +22,30 @@ self.addEventListener('fetch', e => {
     caches.open(CACHE).then(c => c.put(e.request, salin));
     return r;
   }).catch(() => caches.match(e.request, { ignoreSearch: true })));
+});
+
+// ===== Notifikasi pop-up (dihantar oleh Apps Script melalui Firebase Cloud Messaging) =====
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { data: { isi: e.data ? e.data.text() : '' } }; }
+  const data = d.data || {}, n = d.notification || {};
+  const tajuk = data.tajuk || n.title || 'Kiosk Akak Sawadee';
+  const isi = data.isi || n.body || '';
+  const jenis = data.jenis === 'staf' ? 'staf' : 'vendor';
+  e.waitUntil(self.registration.showNotification(tajuk, {
+    body: isi,
+    tag: data.tag || 'sawadee',
+    renotify: true,
+    icon: new URL(jenis + '-192.png', self.location).href,
+    data: { url: new URL(jenis + '.html', self.location).href }
+  }));
+});
+// Tekan notifikasi → buka (atau bawa ke depan) app
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || self.registration.scope;
+  e.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then(senarai => {
+    for (const c of senarai) if (c.url.indexOf(url) === 0 && 'focus' in c) return c.focus();
+    return clients.openWindow(url);
+  }));
 });
