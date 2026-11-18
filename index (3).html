@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App Kiosk Akak Sawadee</title>
+<link rel="icon" type="image/png" href="ikon/favicon.png">
+<meta name="theme-color" content="#d6304f">
+<script src="config.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #fdf3f5; color: #222; }
+  header { background: linear-gradient(135deg, #e8455f, #b51d3c); color: #fff; padding: 28px 20px 70px; text-align: center; }
+  header img { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+  header h1 { margin: 12px 0 4px; font-size: 22px; }
+  header p { margin: 0; opacity: .9; font-size: 14px; }
+  main { max-width: 520px; margin: -50px auto 30px; padding: 0 14px; }
+  .kad { background: #fff; border-radius: 18px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .app { display: flex; gap: 14px; align-items: center; text-decoration: none; color: inherit; }
+  .app img { width: 64px; height: 64px; border-radius: 16px; flex: none; }
+  .app b { font-size: 17px; display: block; }
+  .app span { font-size: 13px; color: #666; }
+  .app .anak { margin-left: auto; font-size: 22px; color: #bbb; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  ol { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; }
+  .tab { display: flex; gap: 8px; margin-bottom: 12px; }
+  .tab button { flex: 1; border: 1.5px solid #e2e2e8; background: #fff; border-radius: 12px; padding: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .tab button.on { border-color: #d6304f; background: #fde8ee; color: #b51d3c; }
+  .amaran { background: #fff3e0; color: #e65100; border-radius: 12px; padding: 12px; font-size: 14px; display: none; }
+  .kecil { font-size: 12.5px; color: #777; }
+</style>
+</head>
+<body>
+<header>
+  <img src="ikon/vendor-512.png" alt="">
+  <h1>Kiosk Akak Sawadee</h1>
+  <p>Pilih app anda, kemudian pasang di skrin utama telefon</p>
+</header>
+<main>
+  <div class="amaran" id="amaran">⚠️ Link app belum ditetapkan. Admin perlu tampal link Web App Apps Script dalam fail <b>config.js</b>.</div>
+
+  <div class="kad"><a class="app" href="vendor/">
+    <img src="ikon/vendor-192.png" alt=""><div><b>App Vendor</b><span>Rekod hantaran, baki, jualan & invois</span></div><div class="anak">›</div></a></div>
+  <div class="kad"><a class="app" href="staf/">
+    <img src="ikon/staf-192.png" alt=""><div><b>App Jurujual & Admin</b><span>Update baki, promo, reject & tutup kiosk</span></div><div class="anak">›</div></a></div>
+
+  <div class="kad">
+    <h2>📲 Cara pasang di telefon</h2>
+    <div class="tab"><button id="t-android" class="on" onclick="pilih('android')">Android</button><button id="t-iphone" onclick="pilih('iphone')">iPhone</button></div>
+    <ol id="c-android">
+      <li>Buka halaman ini dengan <b>Chrome</b>.</li>
+      <li>Tekan <b>App Vendor</b> atau <b>App Jurujual & Admin</b>.</li>
+      <li>Tekan butang <b>⋮</b> (tiga titik) di kanan atas.</li>
+      <li>Pilih <b>Pasang aplikasi</b> / <b>Install app</b> (atau <b>Tambah ke skrin Utama</b>).</li>
+      <li>Tekan <b>Pasang</b>. Ikon app akan keluar di skrin utama.</li>
+    </ol>
+    <ol id="c-iphone" style="display:none">
+      <li>Buka halaman ini dengan <b>Safari</b> (bukan dalam WhatsApp).</li>
+      <li>Tekan <b>App Vendor</b> atau <b>App Jurujual & Admin</b>.</li>
+      <li>Tekan butang <b>Kongsi</b> (kotak dengan anak panah ke atas).</li>
+      <li>Pilih <b>Tambah ke Skrin Utama</b> / <b>Add to Home Screen</b>.</li>
+      <li>Tekan <b>Tambah</b>. Ikon app akan keluar di skrin utama.</li>
+    </ol>
+    <p class="kecil">Selepas dipasang, buka app dari ikon tersebut. Masukkan PIN anda seperti biasa.</p>
+  </div>
+</main>
+<script>
+  function pilih(x) {
+    ['android', 'iphone'].forEach(function (k) {
+      document.getElementById('c-' + k).style.display = k === x ? '' : 'none';
+      document.getElementById('t-' + k).classList.toggle('on', k === x);
+    });
+  }
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) pilih('iphone');
+  if (typeof APP_URL !== 'string' || APP_URL.indexOf('/exec') < 0) document.getElementById('amaran').style.display = 'block';
+</script>
+</body>
+</html>
