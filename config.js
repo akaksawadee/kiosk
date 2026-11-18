@@ -5,4 +5,4 @@
 //  dan berakhir dengan /exec
 // ============================================================
 
-const APP_URL = 'TAMPAL_LINK_APPS_SCRIPT_DI_SINI';
+const APP_URL = 'https://script.google.com/macros/s/AKfycbzYEMeMyJJqiPVQ9xXFjeGZeykGmDBN5W_Us37Vqjen5N-a94G6g-YF4XV-KIiUYWKU/exec';
