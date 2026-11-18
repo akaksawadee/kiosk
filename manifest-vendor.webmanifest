@@ -4,7 +4,7 @@
   "description": "Rekod hantaran, baki & jualan untuk vendor Kiosk Akak Sawadee.",
   "id": "./vendor.html",
   "start_url": "./vendor.html",
-  "scope": "./",
+  "scope": "./vendor.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#d6304f",

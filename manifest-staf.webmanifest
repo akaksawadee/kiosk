@@ -4,7 +4,7 @@
   "description": "Update baki, promo, reject & tutup kiosk untuk jurujual dan admin Kiosk Akak Sawadee.",
   "id": "./staf.html",
   "start_url": "./staf.html",
-  "scope": "./",
+  "scope": "./staf.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#28407a",
