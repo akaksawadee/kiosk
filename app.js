@@ -185,10 +185,18 @@
       });
     }).then(function (token) {
       if (!token) throw new Error('Tiada token');
-      balas({ sawadee: 'token', token: token, peranti: (iOS ? 'iPhone' : /Android/.test(navigator.userAgent) ? 'Android' : 'Komputer') });
+      balas({ sawadee: 'token', token: token, peranti: (iOS ? 'iPhone' : /Android/.test(navigator.userAgent) ? 'Android' : 'Komputer') + '#' + idPeranti() });
       sembunyiBar();
       return token;
     });
+  }
+  /** ID rawak tetap bagi telefon ini — supaya token lama telefon yang sama dibuang (elak notifikasi berganda) */
+  function idPeranti() {
+    try {
+      var id = localStorage.getItem('id_peranti');
+      if (!id) { id = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); localStorage.setItem('id_peranti', id); }
+      return id;
+    } catch (e) { return ''; }
   }
   function hidupkan() {
     var bt = document.getElementById('notif-ya');

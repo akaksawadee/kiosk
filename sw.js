@@ -1,6 +1,6 @@
 // Service worker ringkas: simpan fail app supaya terbuka cepat.
 // Kandungan Apps Script (data jualan) TIDAK disimpan — sentiasa diambil terus dari internet.
-const CACHE = 'sawadee-v3';
+const CACHE = 'sawadee-v4';
 const FAIL = ['./', './index.html', './vendor.html', './staf.html', './config.js', './app.js',
   './manifest-vendor.webmanifest', './manifest-staf.webmanifest',
   './vendor-192.png', './vendor-512.png', './staf-192.png', './staf-512.png', './favicon.png'];
@@ -31,13 +31,18 @@ self.addEventListener('push', e => {
   const data = d.data || {}, n = d.notification || {};
   const tajuk = data.tajuk || n.title || 'Kiosk Akak Sawadee';
   const isi = data.isi || n.body || '';
-  const jenis = data.jenis === 'staf' ? 'staf' : 'vendor';
-  e.waitUntil(self.registration.showNotification(tajuk, {
-    body: isi,
-    tag: data.tag || 'sawadee',
-    renotify: true,
-    icon: new URL(jenis + '-192.png', self.location).href,
-    data: { url: new URL(jenis + '.html', self.location).href }
+  const jenis = data.jenis === 'staf' ? 'staf' : 'vendor', tag = data.tag || 'sawadee';
+  // Mesej yang sama sampai lebih sekali (contoh: telefon berdaftar dua kali) → ganti senyap, tiada bunyi berulang
+  e.waitUntil(self.registration.getNotifications({ tag }).then(ada => {
+    const sama = !!data.id && ada.some(x => x.data && x.data.id === data.id);
+    return self.registration.showNotification(tajuk, {
+      body: isi,
+      tag,
+      renotify: !sama,
+      silent: sama,
+      icon: new URL(jenis + '-192.png', self.location).href,
+      data: { url: new URL(jenis + '.html', self.location).href, id: data.id || '' }
+    });
   }));
 });
 // Tekan notifikasi → buka (atau bawa ke depan) app
